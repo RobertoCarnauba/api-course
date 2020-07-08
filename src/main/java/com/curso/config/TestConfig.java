@@ -10,10 +10,12 @@ import org.springframework.context.annotation.Profile;
 
 import com.curso.entities.Category;
 import com.curso.entities.Order;
+import com.curso.entities.OrderItem;
 import com.curso.entities.Product;
 import com.curso.entities.User;
 import com.curso.entities.enums.OrderStatus;
 import com.curso.repositories.CategoryRespositoy;
+import com.curso.repositories.OrderItemRespositoy;
 import com.curso.repositories.OrderRespositoy;
 import com.curso.repositories.ProductRespositoy;
 import com.curso.repositories.UserRespositoy;
@@ -30,6 +32,8 @@ public class TestConfig implements CommandLineRunner {
 	private CategoryRespositoy categoryRespositoy;
 	@Autowired
 	private ProductRespositoy productRespositoy;
+	@Autowired
+	private OrderItemRespositoy orderItemRespositoy;
 
 
 	@Override
@@ -69,6 +73,15 @@ public class TestConfig implements CommandLineRunner {
 		
 		userRespositoy.saveAll(Arrays.asList(u1, u2, u3));
 		orderRespositoy.saveAll(Arrays.asList(o1, o2, o3));
+		
+		OrderItem oi1 = new OrderItem(o1, p1, 2, p1.getPrice());
+		OrderItem oi2 = new OrderItem(o1, p3, 1, p3.getPrice());
+		OrderItem oi3 = new OrderItem(o2, p3, 2, p3.getPrice());
+		OrderItem oi4 = new OrderItem(o3, p5, 2, p5.getPrice()); 
+		
+		orderItemRespositoy.saveAll(Arrays.asList(oi1, oi2, oi3, oi4));
+		
+		
 	}
 
 }
