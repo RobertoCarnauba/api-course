@@ -18,9 +18,11 @@ import javax.persistence.Table;
 
 import com.curso.entities.enums.OrderStatus;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 @Entity
 @Table(name = "tb_order")
+@JsonPropertyOrder({"id", "orderStatus","moment" })
 public class Order implements Serializable {
 	private static final long serialVersionUID = 1L;
 
@@ -30,14 +32,15 @@ public class Order implements Serializable {
 	private Instant moment;
 	@JsonIgnore
 	private Integer orderStatus;
-
+	
+    @JsonIgnore
 	@ManyToOne
 	@JoinColumn(name = "client_id")
 	private User client;
 	
 	@OneToMany(mappedBy = "id.order")
 	private Set<OrderItem> items = new HashSet<>();
-	@JsonIgnore
+
 	@OneToOne(mappedBy = "order", cascade = CascadeType.ALL)
 	private Payment payment;
 	
@@ -97,6 +100,14 @@ public class Order implements Serializable {
 
 	public void setPayment(Payment payment) {
 		this.payment = payment;
+	}
+	
+	public Double getTotal() {
+		double sum = 0.0;
+		for(OrderItem x : items) {
+			sum =+ x.getSubTotal();
+		}
+		return sum;
 	}
 
 	@Override
